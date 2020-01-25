@@ -1,0 +1,383 @@
+MPASM  5.50                       PARKING.ASM   1-7-2020  7:23:33         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 
+                      00002 ;********************************************************************************
+                      00003 ;                                                                                                       
+                                                                                    *       
+                      00004 ;                                                                                                       
+                                                                                    *
+                      00005 ;                                                            GESTION DE PARKING                         
+                                        *
+                      00006 ;                                                                                                       
+                                                    *
+                      00007 ;                                                                                                       
+                                                                                    *
+                      00008 ;                                                                                                       
+                                                                                    *
+                      00009 ;********************************************************************************
+                      00010 ;                                                                                                       
+                                                                                    *       
+                      00011 ;                                                               TAHIRI MOHAMED AMINE                    
+                                                            *
+                      00012 ;                                                                                                       
+                                                                                    *
+                      00013 ;                                                                                                       
+                                                                                    *
+                      00014 ;********************************************************************************
+                      00015         
+                      00016         
+                      00017         LIST      p=16F84            ; Definition de processeur
+                      00018         #include <p16F84.inc>        ; Definitions de variables
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F84 processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2013 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00206         LIST
+                      00019 
+2007   3FF2           00020         __CONFIG   _CP_OFF & _WDT_OFF & _PWRTE_ON & _HS_OSC
+                      00021         
+Warning[207]: Found label after column 1. (OPTIONVAL)
+  00000038            00022         OPTIONVAL        EQU H'38'    ;    0 0 1 0 1 0 0 0
+Warning[207]: Found label after column 1. (INTERMASK)
+  000000B0            00023         INTERMASK    EQU H'B0'    ;        1 0 1 1 0 0 0 0      
+Warning[207]: Found label after column 1. (TMR0INIT)
+  000000FF            00024         TMR0INIT         EQU H'FF'        ;        255
+Warning[207]: Found label after column 1. (PLACESDISP)
+  0000000A            00025         PLACESDISP       EQU H'0A'        ;    10 places dispo
+                      00026 
+                      00027 
+                      00028         CBLOCK 0x0C                       ; debut de la zone variables
+                      00029         
+  0000000C            00030         w_temp          : 1                             
+MPASM  5.50                       PARKING.ASM   1-7-2020  7:23:33         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  0000000D            00031         status_temp : 1 
+  0000000E            00032         compt           : 1
+  0000000F            00033         compt1          : 1
+  00000010            00034         compt2          : 1
+                      00035                                         
+                      00036     
+                      00037         ENDC                                    ; Fin de la zone    
+                      00038 
+                      00039 ;**********************************************************************
+                      00040 ;                      DEMARRAGE SUR RESET                            *
+                      00041 ;**********************************************************************
+                      00042 
+0000                  00043         org     0x000                   ; Adresse de d?part apr?s reset
+0000   283A           00044         goto    init                    ; Adresse 0: initialiser
+                      00045 
+                      00046 ;**********************************************************************
+                      00047 ;                      REGIME DINTERUPTION                            *
+                      00048 ;**********************************************************************
+                      00049 
+0004                  00050         org             0x004
+0004   008C           00051         movwf   w_temp
+0005   0E03           00052         swapf   STATUS,w
+0006   008D           00053         movwf   status_temp
+                      00054         
+0007   200D           00055         call    inter
+                      00056         
+0008   0E0D           00057         swapf   status_temp,w
+0009   0083           00058         movwf   STATUS
+000A   0E8C           00059         swapf   w_temp,f
+000B   0E0C           00060         swapf   w_temp,w
+000C   0009           00061         retfie
+                      00062 
+000D                  00063 inter
+000D   1C8B           00064         btfss   INTCON,1
+000E   2810           00065         goto    intertmr0
+000F   282A           00066         goto    interRB0
+                      00067 
+0010                  00068 intertmr0
+0010   2032           00069         call    tempo
+0011   110B           00070         bcf             INTCON,2
+0012   30FF           00071         movlw   TMR0INIT
+0013   0081           00072         movwf   TMR0
+0014   080E           00073         movf    compt,w
+0015   3C0A           00074         sublw   PLACESDISP              ; w=PLACESDISP-w
+0016   1D03           00075         btfss   STATUS,2
+0017   2019           00076         call    open
+0018   0008           00077         return
+                      00078 
+0019                  00079 open
+0019   1505           00080         bsf             PORTA,2
+001A   2032           00081         call    tempo
+001B   1105           00082         bcf             PORTA,2 
+Message[305]: Using default destination of 1 (file).
+MPASM  5.50                       PARKING.ASM   1-7-2020  7:23:33         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+001C   0A8E           00083         incf    compt
+001D   080E           00084         movf    compt,w
+001E   3C0A           00085         sublw   PLACESDISP              ; w=PLACESDISP-w
+001F   1D03           00086         btfss   STATUS,2
+0020   0008           00087         return
+0021   2027           00088         call    FR
+0022   0063           00089         sleep
+0023   0008           00090         return
+                      00091         
+0024                  00092 FV
+0024   1005           00093         bcf             PORTA,0
+0025   1485           00094         bsf             PORTA,1
+0026   0008           00095         return
+0027                  00096 FR
+0027   1085           00097         bcf             PORTA,1
+0028   1405           00098         bsf             PORTA,0 
+0029   0008           00099         return
+                      00100         
+002A                  00101 interRB0
+002A   2032           00102         call    tempo
+002B   108B           00103         bcf             INTCON,1
+002C   1585           00104         bsf             PORTA,3
+002D   2032           00105         call    tempo
+002E   1185           00106         bcf             PORTA,3
+Message[305]: Using default destination of 1 (file).
+002F   038E           00107         decf    compt
+0030   2024           00108         call    FV
+0031   0008           00109         return
+                      00110         
+0032                  00111 tempo
+0032   30FF           00112         movlw   .255
+0033   008F           00113         movwf   compt1
+0034                  00114 boucle2
+0034   0190           00115         clrf    compt2
+0035                  00116 boucle1
+Message[305]: Using default destination of 1 (file).
+0035   0B90           00117         decfsz  compt2
+0036   2835           00118         goto    boucle1
+Message[305]: Using default destination of 1 (file).
+0037   0B8F           00119         decfsz  compt1
+0038   2834           00120         goto    boucle2
+0039   0008           00121         return  
+                      00122         
+                      00123 
+                      00124 ;*********************************************************************
+                      00125 ;                       Diminuer la consommation                     *
+                      00126 ;*********************************************************************  
+                      00127 
+003A                  00128 init
+003A   0189           00129         clrf    EEADR                           ; permet de diminuer la consommation
+003B   1683           00130         bsf             STATUS,RP0                      ; sélectionner banque 1
+003C   3038           00131         movlw   OPTIONVAL                       ; charger masque
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+MPASM  5.50                       PARKING.ASM   1-7-2020  7:23:33         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+003D   0081           00132         movwf   OPTION_REG                      ; initialiser registre option                           
+                                                    ; sauter au programme principal
+003E   30B0           00133         movlw   INTERMASK
+003F   008B           00134         movwf   INTCON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0040   0186           00135         clrf    TRISB
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0041   1406           00136         bsf             TRISB,0
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0042   0185           00137         clrf    TRISA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0043   1605           00138         bsf             TRISA,4
+0044   300C           00139         movlw   0x0c                            ; initialisation pointeur
+0045   0084           00140         movwf   FSR                                     ; pointeur d'adressage indirec
+                      00141 
+                      00142 ;*********************************************************************
+                      00143 ;                         EFFACEER LA RAM                            *
+                      00144 ;*********************************************************************
+                      00145 
+0046                  00146 init1
+0046   0180           00147         clrf    INDF                            ; effacer ram
+0047   0A84           00148         incf    FSR,f                           ; pointer sur suivant
+0048   1E04           00149         btfss   FSR,4                           ; tester si fin zone atteinte (>=40)
+0049   2846           00150         goto    init1                           ; non, boucler
+004A   1C04           00151         btfss   FSR,0                           ; tester si fin zone atteinte (>=50)
+004B   2846           00152         goto    init1                           ; non, boucler
+                      00153 
+004C   1283           00154         bcf     STATUS,5
+004D   30FF           00155         movlw   TMR0INIT
+004E   0081           00156         movwf   TMR0
+004F   0185           00157         clrf    PORTA
+0050   2024           00158         call    FV
+0051   2852           00159         goto    START
+                      00160 
+                      00161 
+                      00162 ;*********************************************************************
+                      00163 ;                         PROGRAMME PRINCIPALE                       *
+                      00164 ;*********************************************************************
+                      00165 
+                      00166 
+0052                  00167 START   
+0052   2852           00168         goto    START
+                      00169         
+                      00170         END
+MPASM  5.50                       PARKING.ASM   1-7-2020  7:23:33         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+DC                                00000001
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+F                                 00000001
+FR                                00000027
+FSR                               00000004
+FV                                00000024
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTERMASK                         000000B0
+INTF                              00000001
+IRP                               00000007
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTIONVAL                         00000038
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PLACESDISP                        0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+START                             00000052
+MPASM  5.50                       PARKING.ASM   1-7-2020  7:23:33         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+STATUS                            00000003
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR0INIT                          000000FF
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CONFIG                           00002007
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84                           00000001
+__DEBUG                           1
+boucle1                           00000035
+MPASM  5.50                       PARKING.ASM   1-7-2020  7:23:33         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+boucle2                           00000034
+compt                             0000000E
+compt1                            0000000F
+compt2                            00000010
+init                              0000003A
+init1                             00000046
+inter                             0000000D
+interRB0                          0000002A
+intertmr0                         00000010
+open                              00000019
+status_temp                       0000000D
+tempo                             00000032
+w_temp                            0000000C
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X---XXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXX------------- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    80
+Program Memory Words Free:   944
+
+
+Errors   :     0
+Warnings :     4 reported,     0 suppressed
+Messages :     9 reported,     0 suppressed
+
+

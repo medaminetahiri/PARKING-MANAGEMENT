@@ -1,0 +1,58 @@
+MPLINK 4.48, Linker
+Linker Map File - Created Tue Jan 07 07:23:35 2020
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000002
+                   .org_2       code   0x000004    program   0x00009e
+   .config_2007_PARKING.O       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000000      
+                            0x000004    0x000052      
+                            0x002007    0x002007      
+            81 out of 1093 program addresses used, program memory utilization is 7%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                       FR   0x000027    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                       FV   0x000024    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                    START   0x000052    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                  boucle1   0x000035    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                  boucle2   0x000034    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                     init   0x00003a    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                    init1   0x000046    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                    inter   0x00000d    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                 interRB0   0x00002a    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                intertmr0   0x000010    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                     open   0x000019    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                    tempo   0x000032    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    inter   0x00000d    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                intertmr0   0x000010    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                     open   0x000019    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                       FV   0x000024    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                       FR   0x000027    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                 interRB0   0x00002a    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                    tempo   0x000032    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                  boucle2   0x000034    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                  boucle1   0x000035    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                     init   0x00003a    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                    init1   0x000046    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+                    START   0x000052    program     static D:\Desktop\PROBLEM\Parking\parking.asm
+
+

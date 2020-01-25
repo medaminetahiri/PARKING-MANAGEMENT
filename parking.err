@@ -1,0 +1,13 @@
+Warning[207] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 22 : Found label after column 1. (OPTIONVAL)
+Warning[207] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 23 : Found label after column 1. (INTERMASK)
+Warning[207] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 24 : Found label after column 1. (TMR0INIT)
+Warning[207] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 25 : Found label after column 1. (PLACESDISP)
+Message[305] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 83 : Using default destination of 1 (file).
+Message[305] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 107 : Using default destination of 1 (file).
+Message[305] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 117 : Using default destination of 1 (file).
+Message[305] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 119 : Using default destination of 1 (file).
+Message[302] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 135 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 136 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 137 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] D:\DESKTOP\PROBLEM\PARKING\PARKING.ASM 138 : Register in operand not in bank 0.  Ensure that bank bits are correct.
